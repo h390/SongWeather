@@ -1,6 +1,7 @@
 package com.study.szj.songweather;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -118,6 +119,15 @@ public class ChooseAreaFragment extends Fragment {
                     mSelectCity = mCities.get(position);
                     //通过市查询县
                     queryCountries();
+                } else if (current_level == LEVEL_COUNTY) {
+                    //将当前地区的weather_id传过去
+                    String weather_id = mCounties.get(0).getWeatherId();
+                    Intent intent = new Intent(getActivity(),WeatherActivity.class);
+                    //intent附加信息
+                    intent.putExtra("weather_id", weather_id);
+                    //开启
+                    startActivity(intent);
+                    getActivity().finish();
                 }
             }
         });
@@ -230,6 +240,7 @@ public class ChooseAreaFragment extends Fragment {
                     result = Utility.handleCityResponse(responseText, mSelectProvince.getId());
                 } else if ("county".equals(type)) {
                     result = Utility.handleCountyResponse(responseText, mSelectCity.getId());
+
                 }
                 if (result) {
                     Message message = Message.obtain();

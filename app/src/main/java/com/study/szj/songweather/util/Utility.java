@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.study.szj.songweather.db.City;
 import com.study.szj.songweather.db.County;
 import com.study.szj.songweather.db.Province;
+import com.study.szj.songweather.gson.Weather;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -82,5 +83,23 @@ public class Utility {
             }
         }
         return false;
+    }
+
+
+    /**
+     * 将返回的数据解析成weather类
+     */
+    public static Weather handleWeatherResponse(String response) {
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.optJSONArray("HeWeather data service 3.0");
+            //获得string
+            String weatherContent = jsonArray.getJSONObject(0).toString();
+            //返回weather类
+            return new Gson().fromJson(weatherContent, Weather.class);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
